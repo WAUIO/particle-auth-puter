@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, {
   FC, PropsWithChildren, createContext,
 } from 'react';
@@ -7,6 +6,7 @@ import ParticleNetworkProvider from './contexts/ParticleNetworkContext';
 
 export const ParticleProviderContext = createContext({});
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ConnectorProviderContextProps { }
 
 const ConnectorProvider: FC<PropsWithChildren<ConnectorProviderContextProps>> = ({ children }) => (

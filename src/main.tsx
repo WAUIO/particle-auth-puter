@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import './style.css'
 import ParticleNetworkProvider from './particle/Provider';
 import App from './App.tsx'
 

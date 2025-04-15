@@ -186,7 +186,7 @@ const ParticleConnectkit = ({ children }: React.PropsWithChildren<ParticleConnec
         config,
       }}
     >
-      <ConnectKitProvider config={config} reconnectOnMount>{children}</ConnectKitProvider>
+      <ConnectKitProvider config={config} reconnectOnMount={false}>{children}</ConnectKitProvider>
     </ParticleConnectkitContext.Provider>
   );
 };

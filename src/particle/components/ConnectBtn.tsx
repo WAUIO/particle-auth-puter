@@ -1,17 +1,28 @@
 import { ConnectButton, useAccount } from "@particle-network/connectkit";
+import React from "react";
 
 const ConnectBtn = () => {
   const { address, isConnected, chainId } = useAccount();
 
-  // Standard ConnectButton utilization
   return (
-    <div>
-      <ConnectButton />
+    <div className="connect-btn-container">
+      <h2>Wallet Connection</h2>
+      
+      <div className="connect-button-wrapper">
+        <ConnectButton />
+      </div>
+      
       {isConnected && (
-        <>
-          <h2>Address: {address}</h2>
-          <h2>Chain ID: {chainId}</h2>
-        </>
+        <div className="wallet-info">
+          <div className="info-item">
+            <span className="info-label">Address:</span>
+            <span className="info-value">{address}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Chain ID:</span>
+            <span className="info-value">{chainId}</span>
+          </div>
+        </div>
       )}
     </div>
   );
