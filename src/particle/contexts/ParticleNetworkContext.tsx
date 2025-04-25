@@ -70,7 +70,7 @@ const ParticleNetworkProvider: React.FC<React.PropsWithChildren<ParticleNetworkC
   const handleParticleAuthSuccess = React.useCallback(async () => {
     try {
       // Call Puter's backend to authenticate
-      const response = await fetch(`http://api.puter.localhost:4100/auth/particle`, {
+      const response = await fetch(`${import.meta.env.VITE_PUTER_API_URL}/auth/particle`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
