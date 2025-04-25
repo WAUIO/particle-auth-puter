@@ -12,13 +12,12 @@ import {
   ConnectKitProvider, createConfig, ConnectKitOptions,
 } from '@particle-network/connectkit';
 import { wallet, EntryPosition } from '@particle-network/connectkit/wallet';
-import {
-  arbitrumSepolia,
-  defineChain,
-} from '@particle-network/connectkit/chains';
+import { defineChain } from '@particle-network/connectkit/chains';
 import { authWalletConnectors } from '@particle-network/connectkit/auth';
 import { evmWalletConnectors, walletConnect } from '@particle-network/connectkit/evm';
 import { injected } from '../connectors/injected';
+import elastosLogo from '../../assets/Elastos_Logo_Dark_-_1.svg';
+import './style.css';
 
 /**
  * Context interface for Particle Network ConnectKit configuration
@@ -63,11 +62,7 @@ const elastos = /* #__PURE__ */ defineChain({
 // Please, DO NOT MERGE THIS BRANCH without carefully considering the implications,
 // as it may disrupt the current flow>.
 const chains: ConnectKitOptions['chains'] = [
-  arbitrumSepolia,
-  // arbitrum,
   elastos,
-  // base,
-  // mainnet,
 ];
 
 /**
@@ -77,9 +72,9 @@ const chains: ConnectKitOptions['chains'] = [
  */
 const config = createConfig({
   // Project configuration from environment variables
-  projectId: "eedd2af0-ae18-4349-9073-6c1d4c97a473" as string,
-  clientKey: "cjF2ZKAikZes3X9iaMm5W8fg05y0zfOyTvcUtX2p" as string,
-  appId: "ac2ed189-c6dd-4d04-be4f-fc7b65805c89" as string,
+  projectId: import.meta.env.VITE_PARTICLE_PROJECT_ID as string,
+  clientKey: import.meta.env.VITE_PARTICLE_CLIENT_KEY as string,
+  appId: import.meta.env.VITE_PARTICLE_APP_ID as string,
 
   // Appearance configuration including theme integration
   appearance: {
@@ -90,21 +85,40 @@ const config = createConfig({
     ],
     // UI configuration options
     splitEmailAndPhone: false,
+    isDismissable: false,
     collapseWalletList: false,
     hideContinueButton: true,
     // Order of connection methods
     connectorsOrder: ['email', 'phone', 'social', 'wallet'],
-    logo: '/static/elacity/waving.png',
+    logo: elastosLogo,
     language: 'en-US',
-    // Theme customization using Material UI colors
     theme: {
       '--pcm-font-family': '-apple-system,"Proxima Nova",Arial,sans-serif',
       '--pcm-rounded-sm': '4px',
       '--pcm-rounded-md': '8px',
       '--pcm-rounded-lg': '11px',
       '--pcm-rounded-xl': '22px',
-      '--pcm-body-action-color': 'var(--pcm-body-color)',
+      // '--pcm-body-action-color': 'var(--pcm-body-color)',
+      '--pcm-overlay-background': '#161616',
+      "--pcm-body-background":"#1C1D22",
+      "--pcm-body-background-secondary":"#41424A",
+      "--pcm-body-background-tertiary":"#232529",
+      "--pcm-body-color":"#ffffff",
+      "--pcm-body-color-secondary":"#8B8EA1",
+      "--pcm-body-color-tertiary":"#42444B",
+      "--pcm-primary-button-bankground":"#F59E0B",
+      "--pcm-primary-button-color":"#5c2e00",
+      "--pcm-primary-button-hover-background":"#cf7c00",
+      "--pcm-secondary-button-color":"#361900",
+      "--pcm-secondary-button-bankground":"#ffbb33",
+      "--pcm-secondary-button-hover-background":"#ffce5c",
+      "--pcm-body-action-color":"#808080",
+      "--pcm-button-border-color":"#292B36",
+      "--pcm-accent-color":"#F59E0B",
+      "--pcm-button-font-weight":"500",
+      "--pcm-modal-box-shadow":"0px 2px 4px rgba(0, 0, 0, 0.02)",
     },
+    inlineSelectorId: "__particle_custom_selector_id"
   },
 
   // Configure wallet connectors
@@ -121,7 +135,7 @@ const config = createConfig({
         })] : [],
         walletConnect({
           showQrModal: true,
-          projectId: "ac2ed189-c6dd-4d04-be4f-fc7b65805c89",
+          projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string,
           qrModalOptions: {
             themeVariables: {
               '--wcm-z-index': '2147483647',
@@ -132,8 +146,7 @@ const config = createConfig({
               '--wcm-wallet-icon-border-radius': '16px',
               '--wcm-font-family': '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu',
             },
-            explorerRecommendedWalletIds: 'NONE',
-            enableExplorer: false,
+            enableExplorer: true,
           },
         }),
       ],
@@ -166,6 +179,35 @@ const config = createConfig({
   chains,
 } as ConnectKitOptions);
 
+// List of connector IDs to filter out
+const filteredConnectorIds = ['io.metamask'];
+
+/**
+* Helper function to deep clone objects while preserving descriptors
+* This is necessary for proper handling of connector configurations
+* @param obj - Object to clone
+*/
+const cloneWithDescriptors = (obj: any) => {
+  const clone = Object.create(Object.getPrototypeOf(obj));
+  const descriptors = Object.getOwnPropertyDescriptors(obj);
+
+  // Special handling for connectors array
+  if (descriptors.connectors) {
+    const originalGet = descriptors.connectors.get;
+    descriptors.connectors = {
+      ...descriptors.connectors,
+      get() {
+        const connectors = originalGet?.call(this);
+        return connectors.filter((c: any) => !filteredConnectorIds.includes(c.id));
+      },
+    };
+  }
+
+  Object.defineProperties(clone, descriptors);
+  return clone;
+};
+
+
 /**
  * Context for sharing Particle Network ConnectKit configuration
  */
@@ -180,13 +222,14 @@ export const ParticleConnectkitContext = React.createContext<ParticleConnectkitC
  * @param children - Child components that will have access to ConnectKit functionality
  */
 const ParticleConnectkit = ({ children }: React.PropsWithChildren<ParticleConnectkitProps>) => {
+  const clonedConfig = cloneWithDescriptors(config);
   return (
     <ParticleConnectkitContext.Provider
       value={{
-        config,
+        config: clonedConfig,
       }}
     >
-      <ConnectKitProvider config={config} reconnectOnMount={false}>{children}</ConnectKitProvider>
+      <ConnectKitProvider config={clonedConfig} reconnectOnMount>{children}</ConnectKitProvider>
     </ParticleConnectkitContext.Provider>
   );
 };

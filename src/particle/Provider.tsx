@@ -1,4 +1,4 @@
-import React, {
+import {
   FC, PropsWithChildren, createContext,
 } from 'react';
 import ParticleConnectkit from './contexts/connectkit';
