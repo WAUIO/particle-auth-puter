@@ -82,16 +82,38 @@ const ParticleNetworkProvider: React.FC<React.PropsWithChildren<ParticleNetworkC
       const data = await response.json();
       
       if (data.success) {
-        // Redirect back to main app
-        window.location.href = `/?auth_token=${data.token}`;
+        window.postMessage({
+          type: 'particle-auth.success',
+          payload: {
+            address: account,
+            chainId,
+            token: data.token,
+          }
+        }, '*');
+        if (import.meta.env.VITE_DEV_SANDBOX !== 'true') {
+          // Redirect back to main app
+          window.location.href = `/?auth_token=${data.token}`;
+        }
       } else {
         // Show error message
         console.error('Authentication failed:', data.message);
         // Display error to user
+        window.postMessage({
+          type: 'particle-auth.error',
+          payload: {
+            message: `failed to authenticate: ${data.message}`,
+          }
+        }, '*');
       }
     } catch (error) {
       console.error('Authentication error:', error);
       // Display error to user
+      window.postMessage({
+        type: 'particle-auth.error',
+        payload: {
+          message: `authentication error: ${error}`,
+        }
+      }, '*');
     }
   }, [account, chainId]);
 

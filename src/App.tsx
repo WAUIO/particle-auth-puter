@@ -11,7 +11,7 @@ function App() {
     if(!active) {
       setOpen(true);
     } else {
-      if (isOpen) {
+      if (isOpen && import.meta.env.VITE_DEV_SANDBOX !== 'true') {
         setOpen(false);
       }
     }
