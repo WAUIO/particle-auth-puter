@@ -211,6 +211,7 @@ const cloneWithDescriptors = (obj: any) => {
 /**
  * Context for sharing Particle Network ConnectKit configuration
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const ParticleConnectkitContext = React.createContext<ParticleConnectkitContextProps>({
   // @ts-ignore
   config: null,
@@ -238,6 +239,7 @@ const ParticleConnectkit = ({ children }: React.PropsWithChildren<ParticleConnec
  * Hook to access the Particle Network ConnectKit configuration
  * @returns ConnectKit configuration context
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useConnectkitConfig = () => React.useContext(ParticleConnectkitContext);
 
 // Export memoized component to prevent unnecessary re-renders

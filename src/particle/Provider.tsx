@@ -1,13 +1,12 @@
-import {
-  FC, PropsWithChildren, createContext,
+import type {
+  FC, 
+  PropsWithChildren,
 } from 'react';
 import ParticleConnectkit from './contexts/connectkit';
 import ParticleNetworkProvider from './contexts/ParticleNetworkContext';
 
-export const ParticleProviderContext = createContext({});
-
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface ConnectorProviderContextProps { }
+interface ConnectorProviderContextProps {}
 
 const ConnectorProvider: FC<PropsWithChildren<ConnectorProviderContextProps>> = ({ children }) => (
   <ParticleConnectkit>

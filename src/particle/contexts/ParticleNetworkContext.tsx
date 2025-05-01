@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { isAddress } from '@ethersproject/address';
-import { Web3Provider } from '../provider/web3-provider';
 import { type Connector } from '@particle-network/connector-core';
 import {
   useAccount,
   useDisconnect,
   useWallets,
 } from '@particle-network/connectkit';
+import { Web3Provider } from '../provider/web3-provider';
 
 interface ConnectorContextValue {
   account?: string;
@@ -18,12 +18,13 @@ interface ConnectorContextValue {
   deactivate: () => void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ParticleNetworkContext = React.createContext<ConnectorContextValue>({
-  deactivate: () => { },
+  deactivate: () => {},
 });
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface ParticleNetworkContextProps { }
+interface ParticleNetworkContextProps {}
 
 const ParticleNetworkProvider: React.FC<React.PropsWithChildren<ParticleNetworkContextProps>> = React.memo(({
   children,

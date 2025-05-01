@@ -5,16 +5,19 @@ import { useParticleNetwork } from './particle/hooks/useParticleNetwork';
 
 
 function App() {
-  const { setOpen } = useModal();
+  const { setOpen, isOpen } = useModal();
   const { active } = useParticleNetwork();
   React.useEffect(() => {
     if(!active) {
       setOpen(true);
     } else {
-      setOpen(false);
+      if (isOpen) {
+        setOpen(false);
+      }
     }
-  }, [setOpen, active]);
-  return <></>;
+  }, [setOpen, active, isOpen]);
+  
+  return null;
 }
 
 export default App;
