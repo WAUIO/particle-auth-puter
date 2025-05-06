@@ -12,3 +12,11 @@
   max-width: 100%;
   width: auto;
 }
+
+@media (max-width: 768px) {
+  #__particle_custom_selector_id {
+    display: block;
+    height: 100%;
+  }
+  
+}
