@@ -118,14 +118,8 @@ const ParticleNetworkProvider: React.FC<React.PropsWithChildren<ParticleNetworkC
   }, [account, chainId]);
 
   React.useEffect(() => {
-    console.log(`[DEV_LOG]:`, { active, api_url: import.meta.env.VITE_PUTER_API_URL })
     if (active) {
       handleParticleAuthSuccess();
-
-      /* window.parent.postMessage({
-        type: 'particle-auth-success',
-        payload: { address: account, chainId }
-      }, '*'); */
     }
   }, [active, handleParticleAuthSuccess]);
 
