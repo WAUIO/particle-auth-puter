@@ -118,7 +118,7 @@ const config = createConfig({
       "--pcm-button-font-weight":"500",
       "--pcm-modal-box-shadow":"0px 2px 4px rgba(0, 0, 0, 0.02)",
     },
-    inlineSelectorId: "__particle_custom_selector_id"
+    // inlineSelectorId: "__particle_custom_selector_id"
   },
 
   // Configure wallet connectors
